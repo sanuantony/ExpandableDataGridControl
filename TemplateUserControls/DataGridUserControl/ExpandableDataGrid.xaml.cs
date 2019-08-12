@@ -24,6 +24,7 @@ namespace TemplateUserControls.DataGridUserControl
         public ExpandableDataGrid()
         {
             InitializeComponent();
+            GenerateGridColumns();
         }
 
         #region Private Properties
@@ -33,6 +34,7 @@ namespace TemplateUserControls.DataGridUserControl
         private ExpandableGridColumn nextInlineColumn = new ExpandableGridColumn();
         #endregion Private Properties
 
+        #region Dependency Properties
         public List<ExpandableGridColumn> ColumnsList
         {
             get { return (List<ExpandableGridColumn>)GetValue(ColumnsListProperty); }
@@ -52,6 +54,8 @@ namespace TemplateUserControls.DataGridUserControl
         public static readonly DependencyProperty ItemSourceCollectionProperty =
             DependencyProperty.Register("ItemSourceCollection", typeof(ObservableCollection<object>), typeof(ExpandableDataGrid), new PropertyMetadata(new ObservableCollection<object>()));
 
+        #endregion Dependency Properties
+
         private void DataGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (ColumnsList != null && ColumnsList.Count > 0)
@@ -61,22 +65,39 @@ namespace TemplateUserControls.DataGridUserControl
             }
             if (nextInlineColumn != null && nextInlineColumn.Width > 0)
                 if ((currentWidth + nextInlineColumn.Width) <= DataGridExpander.ActualWidth)
-                {                    
+                {
                     ColumnsList[ColumnsList.LastIndexOf(nextInlineColumn)].Visibility = true;
                     FindCurrentAndNextColumn();
                 }
-                else if (currentWidth>ActualWidth)
+                else if (currentWidth > ActualWidth)
                 {
                     ColumnsList[ColumnsList.LastIndexOf(currentVisibleColumn)].Visibility = false;
                     FindCurrentAndNextColumn();
                 }
             currentWidth = DataGridExpander.ActualWidth;
+            GenerateGridColumns();
+
         }
 
         private void FindCurrentAndNextColumn()
         {
-            nextInlineColumn = ColumnsList.OrderBy(x => x.Order).ToList().FirstOrDefault(i=>i.Visibility.Equals(false));
+            nextInlineColumn = ColumnsList.OrderBy(x => x.Order).ToList().FirstOrDefault(i => i.Visibility.Equals(false));
             currentVisibleColumn = ColumnsList.OrderBy(x => x.Order).ToList().LastOrDefault(i => i.Visibility.Equals(true));
+        }
+
+        private void GenerateGridColumns()
+        {
+            DataGridExpander.ItemsSource = ItemSourceCollection;
+            foreach (var item in ColumnsList)
+            {
+                var column = new DataGridTextColumn
+                {
+                    Header = item.Header,
+                    Binding = new Binding(item.ColumnName),
+                    Width = item.Width,
+                    Visibility = item.Visibility ? Visibility.Visible : Visibility.Collapsed
+                };
+            }
         }
     }
 }

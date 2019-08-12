@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              x:Name="DataGridUIUserControl"
              d:DesignHeight="300" d:DesignWidth="350">
-    <Grid Name="DataGridUIControlGrid">
+    <!--<Grid Name="DataGridUIControlGrid">-->
         <DataGrid Name="DataGridExpander" ItemsSource="{Binding PersonCollection}" SelectedItem="{Binding Path=Person,UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" SizeChanged="DataGrid_SizeChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn/>
@@ -19,5 +19,5 @@
             </DataGrid.Columns>
             
         </DataGrid>
-    </Grid>
+    <!--</Grid>-->
 </UserControl>
