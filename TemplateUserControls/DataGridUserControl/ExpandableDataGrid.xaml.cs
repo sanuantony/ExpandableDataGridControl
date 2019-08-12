@@ -35,6 +35,9 @@ namespace TemplateUserControls.DataGridUserControl
         #endregion Private Properties
 
         #region Dependency Properties
+        /// <summary>
+        /// Adding the list of column in the data grid 
+        /// </summary>
         public List<ExpandableGridColumn> ColumnsList
         {
             get { return (List<ExpandableGridColumn>)GetValue(ColumnsListProperty); }
@@ -45,6 +48,9 @@ namespace TemplateUserControls.DataGridUserControl
             DependencyProperty.Register("ColumnsList", typeof(List<ExpandableGridColumn>), typeof(ExpandableDataGrid), new PropertyMetadata(new List<ExpandableGridColumn>()));
 
 
+        /// <summary>
+        /// ItemSource for the datagrid
+        /// </summary>
         public ObservableCollection<object> ItemSourceCollection
         {
             get { return (ObservableCollection<object>)GetValue(ItemSourceCollectionProperty); }
@@ -78,17 +84,24 @@ namespace TemplateUserControls.DataGridUserControl
             GenerateGridColumns();
 
         }
+        #region Methods
 
+        /// <summary>
+        /// Fetching the last visible column and next column in line to show.
+        /// </summary>
         private void FindCurrentAndNextColumn()
         {
             nextInlineColumn = ColumnsList.OrderBy(x => x.Order).ToList().FirstOrDefault(i => i.Visibility.Equals(false));
             currentVisibleColumn = ColumnsList.OrderBy(x => x.Order).ToList().LastOrDefault(i => i.Visibility.Equals(true));
         }
 
+        /// <summary>
+        /// Generating the data grid columns.
+        /// </summary>
         private void GenerateGridColumns()
         {
             DataGridExpander.ItemsSource = ItemSourceCollection;
-            foreach (var item in ColumnsList)
+            foreach (var item in ColumnsList.Where(x => x.Visibility.Equals(true)))
             {
                 var column = new DataGridTextColumn
                 {
@@ -99,5 +112,6 @@ namespace TemplateUserControls.DataGridUserControl
                 };
             }
         }
+        #endregion Methods
     }
 }
