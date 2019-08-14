@@ -7,17 +7,22 @@
              mc:Ignorable="d" 
              x:Name="DataGridUIUserControl"
              d:DesignHeight="300" d:DesignWidth="350">
-    <!--<Grid Name="DataGridUIControlGrid">-->
-        <DataGrid Name="DataGridExpander" ItemsSource="{Binding PersonCollection}" SelectedItem="{Binding Path=Person,UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}" SizeChanged="DataGrid_SizeChanged">
-            <DataGrid.Columns>
-                <DataGridTextColumn/>
-                <DataGridTextColumn/>
-                <DataGridTextColumn/>
-                <DataGridTextColumn/>
-                <DataGridTextColumn/>
-                <DataGridTextColumn/>
-            </DataGrid.Columns>
-            
-        </DataGrid>
-    <!--</Grid>-->
+    <Grid Name="DataGridUIControlGrid" Width="Auto">
+        <DockPanel>
+            <DataGrid MinWidth="300" 
+                      MaxWidth="700" 
+                      HorizontalScrollBarVisibility="Hidden"    
+                      VerticalScrollBarVisibility="Hidden"  
+                      Name="DataGridExpander" 
+                      SizeChanged="DataGrid_SizeChanged" 
+                      AutoGenerateColumns="False"
+                      Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                <DataGrid.Columns>
+                    <!--<DataGridTextColumn Header="First Name" Binding="{Binding Path=FirstName}"/>
+                    <DataGridTextColumn Header="Last Name" Binding="{Binding Path=LastName}"/>
+                    <DataGridTextColumn Header="Middle Name" Binding="{Binding Path=MiddleName}"/>-->
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
 </UserControl>
